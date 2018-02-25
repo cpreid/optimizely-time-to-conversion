@@ -9,8 +9,9 @@ Allows you to automatically measure the time from visitor-bucketing to conversio
 * Enable the extension you created [(Optimizely docs)](https://help.optimizely.com/Integrate_Other_Platforms/Custom_analytics_integrations_in_Optimizely_X#Enable_an_integration)
 * Create a Numeric Metric [(Optimizely docs)](https://help.optimizely.com/Measure_success%3A_Track_visitor_behaviors/Create_a_metric_in_Optimizely_X) 
   * This metric's _api name_ will be used when configuring the integration within an experiment
-* Visit the `Integrations` tab within an experiment
-* Check the 'tracked' checkbox next to the *Time To Conversion* integration module
+* Visit the `Integrations` tab and you will see a _Time To Conversion integration_ module 
+![Integrations Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/integration.png)
+* Check the 'tracked' checkbox in the upper right
   * Set the `Listen for Event (api name)` field to the _api name_ of the event you want to time
   * Set the `Time To Conversion Event (api name)` field to the _api name_ of the numeric metric you created above
   * Select the appropriate _Reset timer on re-bucket_ setting. If you want to reset the timer on each re-bucket in the experiment, choose 'yes' otherwise choose 'no'.
