@@ -1,0 +1,42 @@
+{
+  "plugin_type": "analytics_integration",
+  "name": "Time To Conversion Tracker",
+  "form_schema": [
+    {
+      "default_value": "",
+      "field_type": "text",
+      "name": "listen_for_evt",
+      "label": "Listen for Event (api name)",
+      "options": null
+    },
+    {
+      "default_value": "",
+      "field_type": "text",
+      "name": "track_ttc_event",
+      "label": "Time To Conversion Event (api name)",
+      "options": null
+    },
+    {
+      "default_value": "yes",
+      "field_type": "dropdown",
+      "name": "resettable",
+      "label": "Reset timer on re-bucket",
+      "options": {
+        "choices": [
+          {
+            "value": "yes",
+            "label": "Yes"
+          },
+          {
+            "value": "no",
+            "label": "No"
+          }
+        ]
+      }
+    }
+  ],
+  "description": "Will allow you to automatically measure the time from bucketing to converting on an event. Time will only be tracked on the first conversion of the event.\n---\nListen for Event (api name) - Measure the time it takes for a user to convert on this event\nTime To Conversion Event (api name) - Track the conversion time (seconds) to this numeric event\nReset timer on re-bucket - Indicates if the timer should be reset on each re-bucket",
+  "options": {
+    "track_layer_decision": "if(extension.listen_for_evt && extension.track_ttc_event) {\n  window.optimizely.get(\"custom/ttc\").listenTrack(\n    extension.listen_for_evt, \n    extension.track_ttc_event, \n    extension.resettable === 'yes');\n}"
+  }
+}
