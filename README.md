@@ -4,7 +4,7 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 
 > This works by persisting a list of _timeable events_ & _bucketing timestamps_ by means of the [(user api)](https://developers.optimizely.com/x/solutions/javascript/reference/index.html#function_setuser). Within Project JavaScript, there is an event tracking listener [(docs)](https://developers.optimizely.com/x/solutions/javascript/reference/#function_registerlisteners) that checks to see if the fired event lives in the list of _timeable events_. If so, the elapsed time (in seconds) between the bucketing decision and the current time is calculated and this value is dispatched as an event (numeric metric) to Optimizely.
 
-![Results Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/results.png)
+![Results Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/resultscreen.png)
 
 ### How to install
 * Install the `Project JavaScript` code found in [projectjs.js](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/projectjs.js)
@@ -17,7 +17,7 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 * Navigate to the experiment to which you'd like to track the conversion
 * Visit the 'Metrics' tab and add the Numeric Metric you created in the first step
 * Visit the 'Integrations' tab and you will see a _Time To Conversion integration_ module 
-![Integrations Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/integration.png)
+![Integrations Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/integrationsscreen.png)
 * Check the 'tracked' checkbox in the upper right
   * Set the `Listen for Event (api name)` field to the _api name_ of the event you want to time
   * Set the `Time To Conversion Event (api name)` field to the _api name_ of the numeric metric you created above
