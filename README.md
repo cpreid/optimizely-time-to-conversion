@@ -41,6 +41,7 @@ localStorage.setItem('logttc', 1);
 * Dispatched tracking calls to Optimizely that include the numeric metric 'time to conversion'
 ---
 ### Future enhancements
-* Max time-to-conversion (extension setting)
+* Multiple metric support (currentl you can only configure to time a single metric)
+* Max time-to-conversion to minimize outliers (extension setting)
 * Conversions in the same session only (extension setting)
 
