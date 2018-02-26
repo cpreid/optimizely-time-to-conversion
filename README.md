@@ -1,6 +1,6 @@
 # optimizely-time-to-conversion
 
-Allows you to measure the "Time To Conversion" for a given metric within your experiment
+Optimizely Analytics Extension that allows you to measure the "Time To Conversion" for a given metric within your experiment
 
 > This works by persisting a list of _timeable events_ & _bucketing timestamps_ by means of the [(user api)](https://developers.optimizely.com/x/solutions/javascript/reference/index.html#function_setuser). Within Project JavaScript, there is an event tracking listener [(docs)](https://developers.optimizely.com/x/solutions/javascript/reference/#function_registerlisteners) that checks to see if the fired event lives in the list of _timeable events_. If so, the elapsed time (in seconds) between the bucketing decision and the current time is calculated and this value is dispatched as an event (numeric metric) to Optimizely.
 
