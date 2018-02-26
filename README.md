@@ -1,4 +1,4 @@
-# optimizely-time-to-conversion
+# Optimizely Time To Conversion
 
 Optimizely Analytics Extension that allows you to measure the "Time To Conversion" for a given metric within your experiment
 
