@@ -1,6 +1,8 @@
 # optimizely-time-to-conversion
 
-Allows you to automatically measure the time from visitor-bucketing to conversion 
+Allows you to measure the "Time To Conversion" for a given metric within your experiment
+
+> This works by persisting a list of _timeable events_ & _bucketing timestamps_ by means of the [(user api)](https://developers.optimizely.com/x/solutions/javascript/reference/index.html#function_setuser). Within Project JavaScript, there is an event tracking listener [(docs)](https://developers.optimizely.com/x/solutions/javascript/reference/#function_registerlisteners) that checks to see if the fired event lives in the list of _timeable events_. If so, the elapsed time between the bucketing decision and the current time is calculated and this value is dispatched as an event (numeric metric) to Optimizely.
 
 ### How to install
 * Install the `Project JavaScript` code found in [projectjs.js](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/projectjs.js)
@@ -9,8 +11,7 @@ Allows you to automatically measure the time from visitor-bucketing to conversio
 * Enable the extension you created [(Optimizely docs)](https://help.optimizely.com/Integrate_Other_Platforms/Custom_analytics_integrations_in_Optimizely_X#Enable_an_integration)
 
 ### How to use
-* Create a Numeric Metric [(Optimizely docs)](https://help.optimizely.com/Measure_success%3A_Track_visitor_behaviors/Create_a_metric_in_Optimizely_X) 
-  * This metric's _api name_ will be used when configuring the integration within an experiment
+* Create a Numeric Metric [(Optimizely docs)](https://help.optimizely.com/Measure_success%3A_Track_visitor_behaviors/Create_a_metric_in_Optimizely_X) and take note of its _api name_
 * Navigate to the experiment to which you'd like to track the conversion
 * Visit the 'Metrics' tab and add the Numeric Metric you created in the first step
 * Visit the 'Integrations' tab and you will see a _Time To Conversion integration_ module 
