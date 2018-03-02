@@ -16,7 +16,7 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 * Create a Numeric Metric [(Optimizely docs)](https://help.optimizely.com/Measure_success%3A_Track_visitor_behaviors/Create_a_metric_in_Optimizely_X) and take note of its _api name_
 * Navigate to the experiment to which you'd like to track the conversion
 * Visit the 'Metrics' tab and add the Numeric Metric you created in the first step
-  * Configure the metric to the following settings `Increase in total value per conversion` 
+  * Configure the metric to the following settings `Decrease in total value per conversion` 
 * Visit the 'Integrations' tab and you will see a _Time To Conversion integration_ module 
 ![Integrations Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/integrationsscreen.png)
 * Check the 'tracked' checkbox in the upper right
