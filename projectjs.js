@@ -38,10 +38,14 @@ var ttcModule = function() {
   var listenTrack = function(listenFor, trackTo, resettable) {
     var ttcData = getData(),
         trackItem = {
-          't': (new Date).getTime(),
+          // starting timestamp in ms epoch
+          't': (new Date).getTime(), 
+          // session that timer was started
           's': window.optimizely.get('session').sessionId,
+          // numeric metric to track to
           'e': trackTo,
-          'o': false // flag to only track once 
+          // flag to only track once
+          'o': false 
         };        
 
     var existingItem = findIdxByKey(ttcData[listenFor], 'e', trackTo);
