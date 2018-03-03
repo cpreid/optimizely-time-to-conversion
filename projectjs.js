@@ -91,10 +91,10 @@ var ttcModule = function() {
       log('Timedelta out of bounds', timeDelta, findStart);
     }
     else if(!stopEntry.o && !findStart) {
-      log('Couldnt find start stopEntry');
+      log('Couldnt find start', stopEntry);
     }
     else {
-      log('Already tracked stopEntry');
+      log('Already tracked', stopEntry);
     }  
   }
 
