@@ -7,7 +7,7 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 ![Results Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/resultscreen.png)
 
 ### How to install
-* Install the `Project JavaScript` code found in [projectjs.js](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/projectjs.js)
+* Install the `Project JavaScript` code found in [projectjs.min.js](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/projectjs.min.js)
 * Create an Analytics Extension from JSON [(Optimizely docs)](https://help.optimizely.com/Integrate_Other_Platforms/Custom_analytics_integrations_in_Optimizely_X#Create_as_JSON)
   * Copy the JSON contents from [analytics-integration-config.json](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/analytics-integration-config.json)
 * Enable the extension you created [(Optimizely docs)](https://help.optimizely.com/Integrate_Other_Platforms/Custom_analytics_integrations_in_Optimizely_X#Enable_an_integration)
