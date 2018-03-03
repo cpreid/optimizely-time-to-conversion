@@ -1,6 +1,6 @@
 {
   "plugin_type": "analytics_integration",
-  "name": "Time To Conversion Tracker",
+  "name": "Time To Conversion Tracker V2",
   "form_schema": [
     {
       "default_value": "yes",
@@ -63,8 +63,8 @@
       "options": null
     }
   ],
-  "description": "Will allow you to automatically measure the time from bucketing to converting on an event. Time will only be tracked on the first conversion of the event.\n---\nListen for Event (api name) - Measure the time it takes for a user to convert on this event\nTime To Conversion Event (api name) - Track the conversion time (seconds) to this numeric event\nReset timer on re-bucket - Indicates if the timer should be reset on each re-bucket",
+  "description": "",
   "options": {
-    "track_layer_decision": "if(extension.start_at_evt && extension.stop_at_evt && extension.elapsed_ttc_metric) {\n  var ttc = window.optimizely.get(\"custom/ttc\"),\n      configOptions = {resettable:false};\n  \n  // configure resettable parameter\n\tvar resettableThreshold = parseFloat(extension.resettable_threshold),\n      resettable = extension.resettable === 'yes';\n  configOptions.resettable = resettableThreshold || resettable;\n  \n  // configure min/max\n  var min = parseFloat(extension.max_ttc),\n      max = parseFloat(extension.min_ttc);\n  if(min) configOptions.min = min;\n  if(max) configOptions.max = max;  \n  \n\tttc.bindTTCTracking(\n    extension.start_at_evt, \n    extension.stop_at_evt, \n\t\textension.elapsed_ttc_metric, \n    configOptions\n  );\n}"
+    "track_layer_decision": "if(extension.start_at_evt && extension.stop_at_evt && extension.elapsed_ttc_metric) {\n  var ttc = window.optimizely.get(\"custom/ttc\"),\n      configOptions = {resettable:false};\n  \n  // configure resettable parameter\n\tvar resettableThreshold = parseFloat(extension.resettable_threshold),\n      resettable = extension.resettable === 'yes';\n  configOptions.resettable = resettableThreshold || resettable;\n  \n  // configure min/max\n  var min = parseFloat(extension.min_ttc),\n      max = parseFloat(extension.max_ttc);\n  if(min) configOptions.min = min;\n  if(max) configOptions.max = max;  \n  \n\tttc.bindTTCTracking(\n    extension.start_at_evt, \n    extension.stop_at_evt, \n\t\textension.elapsed_ttc_metric, \n    configOptions\n  );\n}"
   }
 }
