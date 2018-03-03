@@ -3,7 +3,7 @@ window.optimizely = window.optimizely || [];
 
 var ttcModule = function() {
 
-  var attributeKey = 'ttc';
+  var attrKeys = {start: 'start_ttc', stop: 'stop_ttc'};
 
   var log = function() {
     if(localStorage.getItem('logttc')) {
@@ -11,85 +11,151 @@ var ttcModule = function() {
     }
   }
   
-  var getData = function() {
+  var getData = function(attrKey) {
     var bucketedMetadata = {};
     try {
-      bucketedMetadata = JSON.parse(window.optimizely.get('visitor').custom[attributeKey].value);
+      bucketedMetadata = JSON.parse(window.optimizely.get('visitor').custom[attrKey].value);
     } catch (err) {}
     return bucketedMetadata;
   }
 
-  var findIdxByKey = function(haystack, key, value) {
-    if (!haystack || !haystack.length) return -1;
-    for (var i = 0; i < haystack.length; i++) {
-      if (haystack[i][key] === value) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  var saveTTCData = function(ttcData) {
+  var setData = function(attrKey, ttcData) {
     var saveAttr = {type: 'user', attributes: {}};
-    saveAttr.attributes[attributeKey] = JSON.stringify(ttcData);
+    saveAttr.attributes[attrKey] = JSON.stringify(ttcData);
     window.optimizely.push(saveAttr);
+  }  
+
+  var measureDelta = function(start) {
+    var delta = null;
+    if(start) {
+      try {
+        delta = (new Date() - new Date(start)) / 1000;
+      } catch(err) { }
+    }        
+    return delta;
   }
 
-  var listenTrack = function(listenFor, trackTo, resettable) {
-    var ttcData = getData(),
-        trackItem = {
-          // starting timestamp in ms epoch
-          't': (new Date).getTime(), 
-          // session that timer was started
-          's': window.optimizely.get('session').sessionId,
-          // numeric metric to track to
-          'e': trackTo,
-          // flag to only track once
-          'o': false 
-        };        
+  var validateResettable = function(ts, reset) {
+    if(reset === false || !ts) return false;
+    else if(reset === true) return true;
+    else { // reset can be a number of minutes
+      measureDelta(ts) >= reset;
+    }    
+  }
 
-    var existingItem = findIdxByKey(ttcData[listenFor], 'e', trackTo);
-    // update the time and session of existing trackable item
-    if (resettable && existingItem > -1) {      
-      ttcData[listenFor][existingItem].t = trackItem.t;
-      ttcData[listenFor][existingItem].s = trackItem.s;
-      log('Register listener for "' + listenFor + '"', ttcData);
-    } 
-    // new trackable item
-    else if(existingItem < 0) {      
-      ttcData[listenFor] = (ttcData[listenFor] || []).concat(trackItem);
-      log('Register listener for "' + listenFor + '"', ttcData);      
+  var validateBounds = function(delta, min, max) {
+    log('Validate bounds', min + ' < ' + delta + ' < ' + max); 
+    var valid = true;
+    if(min !== null && delta < min) valid = false;
+    if(max !== null && delta > max) valid = false;
+    return valid;
+  }
+
+  var markStarted = function(evtName, startClockData) {
+    var entry = startClockData[evtName],
+        resettable = validateResettable(entry.ts, entry.r);
+    if(!entry.ts || resettable) {
+      entry.ts = (new Date).getTime();
+      startClockData[evtName] = entry;
+      setData(attrKeys.start, startClockData);
+      log('Started clock (' + evtName + ')', entry);
     }
-    saveTTCData(ttcData);
   }
 
-  var checkDispatch = function(listenFor) {
-    var ttcData = getData();
-    (ttcData[listenFor] || []).forEach(function(item, idx, arr) {
-      if(!item.o) {
-        var timeDelta = Math.round((new Date() - new Date(item.t)) / 1000);
-        log('Dispatch', item.e, timeDelta);
-        arr[idx].o = true;
-        window.optimizely.push({
-         "type": "event",
-         "eventName": item.e,
-         "tags": {
-           "value": timeDelta                   
-         }
-        });
-      }             
-    });
-    saveTTCData(ttcData);
+  var markStopped = function(evtName, stopClockData, startClockData) {
+    var stopEntry = stopClockData[evtName],
+        findStart = startClockData[stopEntry.s] || null,
+        timeDelta = measureDelta(findStart ? findStart.ts : null),
+        validBounds = validateBounds(
+                        timeDelta, 
+                        stopEntry ? stopEntry.y : null, 
+                        stopEntry ? stopEntry.z : null);
+
+    if(!stopEntry.o && findStart && findStart.ts && validBounds) {            
+      log('Track stopEntry (' + stopEntry.t + ')', timeDelta, stopEntry, findStart);
+      window.optimizely.push({
+       "type": "event",
+       "eventName": stopEntry.t,
+       "tags": {
+         "value": timeDelta                   
+       }
+      });
+      stopEntry.o = true;
+      stopClockData[evtName] = stopEntry;
+      setData(attrKeys.stop, stopClockData);
+    }        
+    else if(!stopEntry.o && findStart && !findStart.ts) {
+      log('Start stopEntry has null timestamp');
+    }
+    else if(!stopEntry.o && findStart && findStart.ts && !validBounds) {
+      log('Timedelta out of bounds', timeDelta, findStart);
+    }
+    else if(!stopEntry.o && !findStart) {
+      log('Couldnt find start stopEntry');
+    }
+    else {
+      log('Already tracked stopEntry');
+    }  
+  }
+
+  var bindStopListener = function(startEvtName, stopEvtName, trackToEvtName, config) {
+    var stopClockData = getData(attrKeys.stop),
+        newEntry = {
+          's': startEvtName,
+          't': trackToEvtName,
+          'o': false,
+          'y': config.min || null,
+          'z': config.max || null
+        };
+    if(!stopClockData[stopEvtName]) {
+      stopClockData[stopEvtName] = newEntry;
+      setData(attrKeys.stop, stopClockData);
+    }
+  }
+
+  var bindTTCTracking = function(startEvtName, stopEvtName, trackToEvtName, config) {
+    config = config || {};
+    var startClockData = getData(attrKeys.start),
+        newEntry = {
+          'ts': null,
+          'r': config.resettable || false
+        };
+
+    var existingEntry = startClockData[startEvtName];
+    if(config.resettable && existingEntry) {
+      existingEntry.ts = newEntry.ts;
+      startClockData[startEvtName] = existingEntry;
+      setData(attrKeys.start, startClockData);
+    }
+    else if(!existingEntry) {
+      startClockData[startEvtName] = newEntry;
+      setData(attrKeys.start, startClockData);
+      bindStopListener(startEvtName, stopEvtName, trackToEvtName, config);            
+    }
+  }
+
+  var checkEvt = function(evtName) {
+    var startClockData = getData(attrKeys.start),
+        stopClockData  = getData(attrKeys.stop);
+    if(startClockData[evtName]) markStarted(evtName, startClockData);
+    if(stopClockData[evtName]) markStopped(evtName, stopClockData, startClockData);
   }
 
   var _debug = function() {
-    console.log(getData());
+    console.log('Start', getData(attrKeys.start));
+    console.log('Stop', getData(attrKeys.stop));
+  }
+
+  var clear = function() {
+    setData(attrKeys.start, {});
+    setData(attrKeys.stop, {});
   }
 
   return {
-    listenTrack: listenTrack,
-    checkDispatch: checkDispatch,
-    debug: _debug
+    bindTTCTracking: bindTTCTracking,
+    checkEvt: checkEvt,
+    debug: _debug,
+    clear: clear
   }
 
 }();
@@ -115,6 +181,6 @@ window.optimizely.push({
     name: "trackEvent"
   },
   handler: function(evt) {
-     window.optimizely.get("custom/ttc").checkDispatch(evt.data.apiName);
+     window.optimizely.get("custom/ttc").checkEvt(evt.data.apiName);
   }
 });
