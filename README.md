@@ -21,9 +21,13 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 * Visit the 'Integrations' tab and you will see a _Time To Conversion integration_ module 
 ![Integrations Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/integrationscreen.png)
 * Check the 'tracked' checkbox in the upper right
-  * Set the `Listen for Event (api name)` field to the _api name_ of the event you want to time
-  * Set the `Time To Conversion Event (api name)` field to the _api name_ of the numeric metric you created above
-  * Select the appropriate _Reset timer on re-bucket_ setting. If you want to reset the timer on each re-bucket in the experiment, choose 'yes' otherwise choose 'no'.
+  * `Start Timer At Event (api name)` - _api name_ of the event you want to begin the timer (_required_)
+  * `Stop Timer At Event (api name)` - _api name_ of the event you want to stop the timer (_required_)
+  * `Elapsed Time Metric (api name)` - _api name_ of the numeric event you will track the elapsed time to (_required_)
+  * `Max Time To Conversion` -  will ignore elapsed times above the supplied value
+  * `Min Time To Conversion` - will ignore elapsed times below the supplied value  
+  * `Resettable` - indicates you want to reset the timer if the user re-converts on `Start Timer At Event`
+  * `Resettable After Elapsed Time (sec)` - will only reset the timer if a user re-converts on `Start Timer At Event` after the supplied number of seconds 
 * Save your changes, Publish the experiment
 ---
 ### Debugging
