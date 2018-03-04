@@ -42,11 +42,10 @@ window.optimizely.get("custom/ttc").debug();
 ```
 localStorage.setItem('logttc', 1);
 ```
-* _Timeable events_ that are registered into the visitors profile (via the `window.optimizely.get("custom/ttc").listenTrack` call within the extension
+* _Timeable events_ that are registered into the visitors profile (via the `window.optimizely.get("custom/ttc").bindTTCTracking` call within the extension
 * Dispatched tracking calls to Optimizely that include the numeric metric 'time to conversion'
 ---
 ### Future enhancements
 * Multiple metric support (currently you can only configure to time a single metric)
-* Max time-to-conversion to minimize outliers (extension setting)
 * Conversions in the same session only (extension setting)
 
