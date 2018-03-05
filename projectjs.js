@@ -12,10 +12,12 @@ var ttcModule = function() {
   }
   
   var getData = function(attrKey) {
-    var bucketedMetadata = {};
+    var bucketedMetadata;
     try {
-      bucketedMetadata = JSON.parse(window.localStorage.getItem(attrKey + "_" + window.optimizely.get("visitor").visitorId));
-    } catch (err) {}
+      bucketedMetadata = JSON.parse(window.localStorage.getItem(attrKey + "_" + window.optimizely.get("visitor").visitorId) || '{}');      
+    } catch (err) {
+      bucketedMetadata = {};
+    }
     return bucketedMetadata;
   }
 
