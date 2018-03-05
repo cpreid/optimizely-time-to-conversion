@@ -3,7 +3,7 @@ window.optimizely = window.optimizely || [];
 
 var ttcModule = function() {
 
-  var attrKeys = {start: 'start_ttc', stop: 'stop_ttc'};
+  var attrKeys = {start: 'start_ttc_data', stop: 'stop_ttc_data'};
 
   var log = function() {
     if(localStorage.getItem('logttc')) {
@@ -14,15 +14,13 @@ var ttcModule = function() {
   var getData = function(attrKey) {
     var bucketedMetadata = {};
     try {
-      bucketedMetadata = JSON.parse(window.optimizely.get('visitor').custom[attrKey].value);
+      bucketedMetadata = JSON.parse(window.localStorage.getItem(attrKey + "_" + window.optimizely.get("visitor").visitorId));
     } catch (err) {}
     return bucketedMetadata;
   }
 
   var setData = function(attrKey, ttcData) {
-    var saveAttr = {type: 'user', attributes: {}};
-    saveAttr.attributes[attrKey] = JSON.stringify(ttcData);
-    window.optimizely.push(saveAttr);
+    window.localStorage.setItem(attrKey + "_" + window.optimizely.get("visitor").visitorId, JSON.stringify(ttcData));
   }  
 
   var measureDelta = function(start) {
