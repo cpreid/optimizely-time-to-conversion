@@ -4,6 +4,8 @@ Optimizely Analytics Extension that allows you to measure the "Time To Conversio
 
 > This works by persisting a list of _timeable events_ & _bucketing timestamps_ in localStorage. Within Project JavaScript, there is an event tracking listener [(docs)](https://developers.optimizely.com/x/solutions/javascript/reference/#function_registerlisteners) that checks to see if the fired event lives in the list of _timeable events_. If so, the elapsed time (in seconds) between the `Start Timer At Event (api name)` timestamp and the current time is calculated and this value is dispatched as an event (numeric metric) to Optimizely.
 
+> Update: Previously, the module used the Optimizely visitor attributes API to store the data. This resulted in sending large chunks of stringified JSON in every Optimizely event request. The timestamp data has since been moved to separate local storage keys. Caveat: Measuring time-to-conversion across domains will not work out of the box, since the timestamp data is no longer attached to the Optimizely visitor data storage. 
+
 ![Results Screen](https://github.com/cpreid/optimizely-time-to-conversion/blob/master/docs/resultsscreen.png)
 
 ### How to install
